@@ -59,7 +59,20 @@ export default {
         allowInsertRow: false,
         freezeColumns: 1,
         columns: this.setReadOnly(),
-        contextMenu: function (obj, x, y, e) {},
+        contextMenu: function (obj, x, y, e) {
+          var items = [];
+
+          items.push({
+            title: "CHECK COUNTERPARTY",
+            onclick() {
+              let xx = obj.getRowData(y);
+              console.log(xx);
+              console.log(obj.getConfig().colHeaders);
+            },
+          });
+
+          return items;
+        },
         onselection: this.selectionActive,
         nestedHeaders: [
           [
@@ -73,6 +86,10 @@ export default {
     },
   },
   methods: {
+    checkCounterparty() {
+      console.log("here");
+      alert("oi");
+    },
     cellId(col, row) {
       return `${this.alphabet[col].toUpperCase()}${row}`;
     },

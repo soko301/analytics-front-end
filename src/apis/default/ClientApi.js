@@ -1,6 +1,9 @@
 import Api from "./Api";
 
 export default {
+  refresh_data() {
+    return Api.get(`/refresh`);
+  },
   get_accounts() {
     return Api.get(`/accounts`);
   },

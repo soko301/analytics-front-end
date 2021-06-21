@@ -9,11 +9,20 @@
               <v-list-item>
                 <v-list-item-action>
                   <v-btn ripple small icon>
-                    <v-icon color="#385F73">mdi-account-outline</v-icon>
+                    <v-icon @click="refresh_account_data()" color="#385F73"
+                      >mdi-account-outline</v-icon
+                    >
                   </v-btn>
                 </v-list-item-action>
                 <v-list-item-content>
-                  <AccountList @alert_account_change="setAccount" />
+                  <div v-if="progress">
+                    Data is updating...
+                    <v-progress-circular
+                      indeterminate
+                      color="primary"
+                    ></v-progress-circular>
+                  </div>
+                  <AccountList v-else @alert_account_change="setAccount" />
                 </v-list-item-content>
               </v-list-item>
               <v-subheader>Actions </v-subheader>
@@ -140,6 +149,7 @@ export default {
   data() {
     return {
       loaded: false,
+      progress: false,
     };
   },
   computed: {
@@ -171,6 +181,16 @@ export default {
         let response = await Api.get_accounts();
         this.client_list = [...this.client_list, ...response.data];
         this.loaded = true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async refresh_account_data() {
+      try {
+        this.progress = true;
+        await Api.refresh_data();
+
+        this.progress = false;
       } catch (error) {
         console.log(error);
       }
