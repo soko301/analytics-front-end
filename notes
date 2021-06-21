@@ -1,0 +1,2 @@
+docker build -t jamiesokolsky/nlpfrontend .
+docker push jamiesokolsky/nlpfrontend

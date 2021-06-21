@@ -1,0 +1,10 @@
+{
+  "columns": [
+    "Amount",
+    "Delta USD",
+    "Trade PNL USD",
+    "MTM USD",
+    "Option Premium Amount",
+    "Option Premium USD"
+  ]
+}

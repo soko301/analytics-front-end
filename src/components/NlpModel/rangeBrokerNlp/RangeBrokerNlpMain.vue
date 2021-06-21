@@ -1,0 +1,148 @@
+<template>
+  <div>
+    <v-container class="center">
+      <v-progress-linear
+        v-if="!childDataLoaded"
+        indeterminate
+      ></v-progress-linear>
+    </v-container>
+    <div class="d-flex flex-row">
+      <SideBar
+        :showSideControl="true"
+        :recentCrosses="recentCrosses"
+        @alert_config="updateConfigFromSideBar"
+        @toggle_search_view="toggleSearchView"
+      />
+      <div v-if="config.view === ''">
+        <h4
+          class="font-weight-medium text-center blue--text text--darken-3 ml-1"
+        >
+          SELECT DATES FOR RANGE AND HIT RUN BATCH
+        </h4>
+      </div>
+      <RangeBrokerNlpModel
+        v-if="config.view === 'NLP'"
+        :cross="config.selectedCross"
+        :filter="config.filter"
+        :date_str="date_str_arr"
+        @alert_child_data_loaded="setChildDataStatus"
+        @emit_selected_raw_text="setSelectedRawText"
+        :key="componentKey"
+      />
+      <BrokerChatSummary
+        v-if="config.view === 'SUMMARY'"
+        :date_str="date_str_arr"
+        @alert_child_data_loaded="setChildDataStatus"
+        @cross_selected="updateConfigFromSummary"
+        :key="componentKey"
+      />
+      <ChatSearchController
+        v-if="config.view === 'SEARCH'"
+        :date_str="searchSentenceDate"
+        :searchSentence="searchSentence"
+        :selectedCross="config.selectedCross"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+import SideBar from "@/components/NlpModel/rangeBrokerNlp/RangeBrokerNlpSideBar.vue";
+import RangeBrokerNlpModel from "@/components/NlpModel/rangeBrokerNlp/RangeBrokerNlpModel.vue";
+import BrokerChatSummary from "@/components/NlpModel/sharedComponents/BrokerChatSummary.vue";
+import ChatSearchController from "@/components/NlpModel/sharedComponents/chatSearch/ChatSearchController.vue";
+import { mapState } from "vuex";
+export default {
+  name: "RangeBrokerNlpMain",
+  components: {
+    SideBar,
+    RangeBrokerNlpModel,
+    BrokerChatSummary,
+    ChatSearchController,
+  },
+  data() {
+    return {
+      config: {
+        date_str: "",
+        date_str2: "",
+        view: "",
+        filter: "",
+        selectedCross: this.$store.getters.activeCrossGetter,
+      },
+      recentCrosses: [this.$store.getters.activeCrossGetter],
+      componentKey: 0,
+      childDataLoaded: true,
+      searchSentence: "",
+      searchSentenceDate: "",
+    };
+  },
+  computed: {
+    ...mapState({
+      crosses: (state) => state.crossList,
+    }),
+    date_str_arr() {
+      return [this.config.date_str, this.config.date_str2];
+    },
+  },
+  methods: {
+    updateConfigFromSummary(val) {
+      this.childDataLoaded = false;
+      this.config.selectedCross = val;
+
+      this.config.filter = "ALL";
+      this.config.view = "NLP";
+      if (this.recentCrosses.indexOf(val) === -1) {
+        this.recentCrosses.push(val);
+      }
+      this.componentKey += 1;
+    },
+    updateConfigFromSideBar(val) {
+      this.childDataLoaded = false;
+      Object.assign(this.config, val);
+      this.searchSentence = "";
+      this.componentKey += 1;
+    },
+    toggleSearchView() {
+      if (this.config.view === "SUMMARY") {
+        return;
+      }
+      if (this.searchSentence === "") {
+        alert("SELECT TEXT TO SEARCH");
+        return;
+      }
+      if (this.config.view !== "SEARCH") {
+        this.config.view = "SEARCH";
+      } else {
+        this.config.view = "NLP";
+      }
+    },
+    setChildDataStatus(val) {
+      this.childDataLoaded = true;
+    },
+    setSelectedRawText(val) {
+      this.searchSentence = val.text;
+      this.searchSentenceDate = this.formatDateStr(val.date);
+    },
+    formatDateStr(str) {
+      let res = str.split("-");
+      return `${res[0]}_${res[1].toLowerCase()}_${res[2]}`;
+    },
+  },
+  watch: {
+    "config.selectedCross"(val) {
+      this.$emit("cross_changed", val);
+    },
+  },
+};
+</script>
+
+<style>
+.center {
+  margin: 0;
+  width: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
