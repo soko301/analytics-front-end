@@ -56,7 +56,10 @@ export default {
       loaded: false,
       componentKey: 0,
       no_data_message: "",
-      colwidths: [],
+      colwidths: [
+        400, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+        100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,
+      ],
     };
   },
   async created() {
@@ -67,6 +70,18 @@ export default {
       selected_account: (state) => state.active_account,
       selected_account_for_api: (state) => state.active_account_for_api,
     }),
+    //  col_widths() {
+    //   let cols = [];
+    //   if (this.selected_account === "ALL") {
+    //     cols.push(150, 100, 500);
+    //   } else {
+    //     cols = [150, 100];
+    //   }
+    //   for (let index = 0; index < this.strike_pivot.length; index++) {
+    //     cols.push(60);
+    //   }
+    //   return cols;
+    // },
   },
   methods: {
     async handleApiRequest() {
