@@ -40,4 +40,7 @@ export default {
   get_delta_position_all_cross(account) {
     return Api.get(`/delta_all_cross/${account}`);
   },
+  search_van_deals_by_dets(cross, maturity_date, strike) {
+    return Api.get(`/search_van_deals_by_dets/${cross}/${maturity_date}/${strike}`);
+  },
 };

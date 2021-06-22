@@ -17,11 +17,13 @@
         OPEN DELTA: {{ cross_delta }}
       </h4>
       <div v-if="this.van_opts.length > 0">
-        <DataTable
+        <VanDealsByStrike :detsObj="this.van_deal_dets" />
+        <DataTableStrikeGrid
           :apidata="strike_pivot"
           :headerData="`${cross} - VANILLAS - OPEN POSITION STRIKES`"
           :key="componentKey"
           :colwidths="strike_col_widths"
+          @emit_booking_ref="setVanDealDets"
           class="ml-1 mt-3"
         />
         <DataTable
@@ -54,12 +56,16 @@
 <script>
 import Api from "@/apis/default/ClientApi.js";
 import DataTable from "@/components/clientData/clientAnalytics/DataTable.vue";
+import DataTableStrikeGrid from "@/components/clientData/clientAnalytics/DataTableStrikeGrid.vue";
+import VanDealsByStrike from "@/components/clientData/clientAnalytics/VanDealsByDets.vue";
 import { mapState } from "vuex";
 
 export default {
   name: "client_model",
   components: {
     DataTable,
+    DataTableStrikeGrid,
+    VanDealsByStrike,
   },
   props: {
     cross: { type: String },
@@ -71,6 +77,7 @@ export default {
       van_opts: [],
       exo_opts: [],
       strike_pivot: [],
+      van_deal_dets: {},
       loaded: false,
       componentKey: 0,
       no_data_message: "",
@@ -123,6 +130,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    setVanDealDets(val) {
+      this.van_deal_dets = val;
     },
     setBookingRef(val) {
       this.$emit("emit_booking_ref", val);

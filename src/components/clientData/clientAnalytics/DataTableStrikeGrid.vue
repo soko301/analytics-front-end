@@ -1,10 +1,11 @@
 <template>
-  <div class="jTable" ref="spreadsheet"></div>
+  <div>
+    <div class="jTable" ref="spreadsheet"></div>
+  </div>
 </template>
 
 <script>
 import jexcel from "jexcel";
-
 import alphabetJson from "@/externaljs/Alphabet.json";
 import columnFormat from "@/components/clientData/clientAnalytics/columnFormat.json";
 import cssHighLightRowHelper from "@/externaljs/cssHighLiteRow.js";
@@ -13,11 +14,13 @@ import { mapState } from "vuex";
 export default {
   name: "client_datatable",
   created() {},
+
   data() {
     return {
       alphabet: alphabetJson.alphabet,
       columnFormat: columnFormat.columns,
       activeRow: 0,
+      activeCol: 0,
     };
   },
   props: {
@@ -28,6 +31,7 @@ export default {
   computed: {
     ...mapState({
       window: (state) => state.window,
+      active_cross: (state) => state.active_cross,
     }),
     tableHeaders() {
       return Object.keys(this.apidata[0]);
@@ -42,10 +46,19 @@ export default {
       return tdata;
     },
     booking_ref() {
-      return this.jExcelObj.getValueFromCoords(
-        this.tableHeaders.indexOf("Booking Ref"),
+      let maturity_date = this.jExcelObj.getValueFromCoords(
+        this.tableHeaders.indexOf("Maturity Date"),
         this.activeRow
       );
+      let cross = this.active_cross;
+
+      let strike = this.tableHeaders[this.activeCol];
+
+      return {
+        cross: cross,
+        maturity_date: maturity_date,
+        strike: strike,
+      };
     },
     config() {
       return {
@@ -73,6 +86,9 @@ export default {
     },
   },
   methods: {
+    dev() {
+      console.log(this.booking_ref);
+    },
     cellId(col, row) {
       return `${this.alphabet[col].toUpperCase()}${row}`;
     },
@@ -100,7 +116,9 @@ export default {
 
     selectionActive(instance, x1, y1, x2, y2, origin) {
       this.activeRow = y1;
+      this.activeCol = x1;
       this.$emit("emit_booking_ref", this.booking_ref);
+
       let cssUser = new cssHighLightRowHelper(this.jExcelObj, true, x1, y1);
       cssUser.activateUserEditableClasses();
     },
