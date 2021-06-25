@@ -61,6 +61,11 @@
         @alert_child_data_loaded="setChildDataStatus"
         :key="componentKey"
       />
+      <TotalPnlCrossChart
+        v-if="view === 'PNLBARCHART'"
+        @alert_child_data_loaded="setChildDataStatus"
+        :key="componentKey"
+      />
       <OpenPositionDeltas
         v-if="view === 'OPENPOSITIONDELTAS'"
         :key="componentKey"
@@ -81,6 +86,7 @@ import AccountByCross from "@/components/clientData/clientAnalytics/AccountByCro
 import ChartDxTime from "@/components/clientData/chartScatterDxTime/DxTimeController.vue";
 import HistogramTradeTime from "@/components/clientData/Histograms/HistogramTradeTimeController.vue";
 import OpenPositionDeltas from "@/components/clientData/clientAnalytics/PositionDeltas.vue";
+import TotalPnlCrossChart from "@/components/clientData/PnlBarChart/PnlBarChartController.vue";
 
 import { mapState } from "vuex";
 
@@ -98,6 +104,7 @@ export default {
     ChartDxTime,
     HistogramTradeTime,
     OpenPositionDeltas,
+    TotalPnlCrossChart,
   },
   data() {
     return {

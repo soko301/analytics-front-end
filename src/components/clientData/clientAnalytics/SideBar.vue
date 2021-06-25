@@ -94,6 +94,14 @@
                   <v-list-item-title>SPOT DX VS TIME</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
+              <v-list-item @click="setView('PNLBARCHART')" ripple>
+                <v-list-item-action>
+                  <v-icon color="#385F73">mdi-chart-line</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>TOTAL PNL BY CROSS</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
               <v-list-item @click="setView('HISTOGRAMTRADETIME')" ripple>
                 <v-list-item-action>
                   <v-icon color="#385F73">mdi-chart-line</v-icon>

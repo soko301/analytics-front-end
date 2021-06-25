@@ -46,4 +46,7 @@ export default {
   build_mars_file(cross, account) {
     return Api.get(`/bbg_upload/${cross}/${account}`);
   },
+  get_pnl_cross(account) {
+    return Api.get(`/pnl_by_cross/${account}`);
+  },
 };
