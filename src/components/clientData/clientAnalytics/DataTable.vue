@@ -1,5 +1,10 @@
 <template>
-  <div class="jTable" ref="spreadsheet"></div>
+  <div>
+    <div v-if="range_sum !== 0">
+      Range-Sum:{{ range_sum.toLocaleString("en-US") }}
+    </div>
+    <div class="jTable" ref="spreadsheet"></div>
+  </div>
 </template>
 
 <script>
@@ -18,6 +23,7 @@ export default {
       alphabet: alphabetJson.alphabet,
       columnFormat: columnFormat.columns,
       activeRow: 0,
+      range_sum: 0,
     };
   },
   props: {
@@ -47,6 +53,7 @@ export default {
         this.activeRow
       );
     },
+
     config() {
       return {
         data: this.tableData,
@@ -100,9 +107,21 @@ export default {
 
     selectionActive(instance, x1, y1, x2, y2, origin) {
       this.activeRow = y1;
+      this.range_sum = this.sumCol(x1, y1, y2);
+
       this.$emit("emit_booking_ref", this.booking_ref);
       let cssUser = new cssHighLightRowHelper(this.jExcelObj, true, x1, y1);
       cssUser.activateUserEditableClasses();
+    },
+    sumCol(col, row_start, row_end) {
+      let sum = 0;
+      if (isNaN(this.jExcelObj.getValueFromCoords(col, row_start))) {
+        return sum;
+      }
+      for (let i = row_start; i <= row_end; i++) {
+        sum = sum + this.jExcelObj.getValueFromCoords(col, i);
+      }
+      return sum;
     },
     FormatTable(data, table) {
       table.hideIndex();

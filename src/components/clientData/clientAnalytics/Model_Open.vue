@@ -18,6 +18,7 @@
       </h4>
       <div v-if="this.van_opts.length > 0">
         <VanDealsByStrike :detsObj="this.van_deal_dets" />
+
         <DataTableStrikeGrid
           :apidata="strike_pivot"
           :headerData="`${cross} - VANILLAS - OPEN POSITION STRIKES`"
@@ -26,6 +27,9 @@
           @emit_booking_ref="setVanDealDets"
           class="ml-1 mt-3"
         />
+        <v-btn @click="download_mars()" x-small outlined class="ml-2 my-2"
+          >Download Mars File</v-btn
+        >
         <DataTable
           :apidata="this.van_opts"
           :headerData="`${cross} - VANILLAS -OPEN POSITION `"
@@ -151,6 +155,15 @@ export default {
       this.loaded = true;
       this.componentKey += 1;
       this.$emit("alert_child_data_loaded", true);
+    },
+    async download_mars() {
+      try {
+        await Api.build_mars_file(this.cross, this.selected_account_for_api);
+
+        alert("Mars file downloaded to your documents folder");
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   watch: {},

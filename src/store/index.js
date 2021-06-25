@@ -99,8 +99,6 @@ const actions = {
     commit("SET_ACTIVE_CROSS", data);
   },
   async setPositionDeltas({ commit }, selected_account_for_api) {
-    console.log("inSet");
-    console.log(selected_account_for_api);
     try {
       let response = await Api.get_delta_position_all_cross(
         selected_account_for_api

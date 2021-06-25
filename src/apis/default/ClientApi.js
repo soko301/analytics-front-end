@@ -43,4 +43,7 @@ export default {
   search_van_deals_by_dets(cross, maturity_date, strike) {
     return Api.get(`/search_van_deals_by_dets/${cross}/${maturity_date}/${strike}`);
   },
+  build_mars_file(cross, account) {
+    return Api.get(`/bbg_upload/${cross}/${account}`);
+  },
 };
