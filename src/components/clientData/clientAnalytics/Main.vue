@@ -7,7 +7,7 @@
       ></v-progress-linear>
     </v-container>
     <div class="d-flex flex-row">
-      <SideBar :showSideControl="true" />
+      <SideBar :showSideControl="true" @alert_agile_updated="refresh_agile" />
       <Model
         v-if="view === 'MODEL'"
         :cross="active_cross"
@@ -166,6 +166,9 @@ export default {
           this.analytics_history_view
         );
       }
+    },
+    refresh_agile() {
+      this.componentKey += 1;
     },
   },
   watch: {

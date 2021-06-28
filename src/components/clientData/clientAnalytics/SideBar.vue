@@ -197,8 +197,9 @@ export default {
       try {
         this.progress = true;
         await Api.refresh_data();
-
         this.progress = false;
+
+        this.$emit("alert_agile_updated");
       } catch (error) {
         console.log(error);
       }

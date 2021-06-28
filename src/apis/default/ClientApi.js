@@ -7,12 +7,6 @@ export default {
   get_accounts() {
     return Api.get(`/accounts`);
   },
-  get_data_by_cross(cross) {
-    return Api.get(`/client_data/${cross}`);
-  },
-  get_data_by_cross_and_account(cross, account) {
-    return Api.get(`/client_data/${cross}/${account}`);
-  },
   get_data_van_exo(cross, account) {
     return Api.get(`/van_exo/${cross}/${account}`);
   },
