@@ -14,7 +14,7 @@
                       {{ name }}:
                     </div>
                     <v-spacer />
-                    <div>{{ value }}</div>
+                    <div>{{ value.toLocaleString() }}</div>
                   </div>
                 </div>
                 <v-divider class="my-2" />

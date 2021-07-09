@@ -10,12 +10,9 @@ import Chart from "chart.js";
 
 export default {
   props: {
-    chartTitle: { type: String },
     inputLabels: { type: Array },
-    inputSeries1: { type: Array },
+    inputSeries: { type: Object },
     id_name: { type: String },
-    data_label: { type: String },
-    bar_color: { type: String },
   },
   data() {
     return {
@@ -25,10 +22,18 @@ export default {
           labels: this.inputLabels,
           datasets: [
             {
-              label: this.data_label,
-              data: this.inputSeries1,
+              label: "ALL TRADES",
+              data: this.inputSeries["all"],
               borderColor: ["385F73"],
-              backgroundColor: this.bar_color,
+              backgroundColor: "rgba(71, 183,132,.5)",
+              barThickness: 39,
+              minBarLength: 0,
+            },
+            {
+              label: "OPEN POSITIONS",
+              data: this.inputSeries["open"],
+              borderColor: ["385F73"],
+              backgroundColor: "#A9D3FF",
               barThickness: 39,
               minBarLength: 0,
             },
@@ -36,8 +41,8 @@ export default {
         },
         options: {
           title: {
-            display: false,
-            text: this.chartTitle,
+            display: true,
+            text: "PNL USD",
           },
 
           responsive: true,

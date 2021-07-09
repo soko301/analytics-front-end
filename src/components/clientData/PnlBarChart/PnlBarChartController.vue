@@ -8,11 +8,10 @@
             <HistogramChart
               :key="componentKey"
               :inputLabels="bins"
-              :inputSeries1="frequency"
+              :inputSeries="frequency"
               :chartTitle="`Total PNL BY CROSS`"
               id_name="hist"
               data_label="TOTAL PNL USD"
-              bar_color="rgba(71, 183,132,.5)"
             />
           </div>
         </div>
@@ -36,7 +35,7 @@ export default {
   },
   data() {
     return {
-      apiData: [],
+      apiData: { all: [], open: [] },
       loaded: false,
       componentKey: 0,
       refreshingData: false,
@@ -53,27 +52,67 @@ export default {
     }),
 
     bins() {
-      const arr = this.apiData.map((x) => {
+      const cross_all = this.apiData["all"].map((x) => {
         return x["CCY Pair"];
       });
-      return arr;
+
+      return cross_all;
     },
     frequency() {
-      const arr = this.apiData.map((x) => {
+      const all = this.apiData["all"].map((x) => {
         return x["Trade PNL USD"];
       });
-      return arr;
+      const open = this.apiData["open"].map((x) => {
+        return x["Trade PNL USD"];
+      });
+
+      return {
+        all: all,
+        open: open,
+      };
     },
   },
   methods: {
-    dev() {},
+    dev() {
+      console.log(this.frequency);
+    },
+    find_missing_cross_in_open() {
+      const cross_all = this.apiData["all"].map((x) => {
+        return x["CCY Pair"];
+      });
+
+      const cross_open = this.apiData["open"].map((x) => {
+        return x["CCY Pair"];
+      });
+
+      var currentSet = new Set(cross_open);
+      return cross_all.filter((x) => !currentSet.has(x));
+    },
 
     async getApiData() {
       try {
         let response = await Api.get_pnl_cross(this.selected_account_for_api);
 
-        this.apiData = response.data;
+        this.apiData["all"] = JSON.parse(response.data.all);
+        this.apiData["open"] = JSON.parse(response.data.open);
+
+        let missing_crosses = this.find_missing_cross_in_open();
+        missing_crosses.forEach((element) => {
+          this.apiData["open"].push({
+            "CCY Pair": element,
+            "Trade PNL USD": 0,
+          });
+        });
+
+        this.apiData["all"].sort((a, b) =>
+          a["CCY Pair"] > b["CCY Pair"] ? 1 : -1
+        );
+        this.apiData["open"].sort((a, b) =>
+          a["CCY Pair"] > b["CCY Pair"] ? 1 : -1
+        );
+
         console.log(this.apiData);
+
         this.loaded = true;
         this.$emit("alert_child_data_loaded", true);
       } catch (error) {

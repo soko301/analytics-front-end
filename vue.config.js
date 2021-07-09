@@ -2,5 +2,12 @@ module.exports = {
   transpileDependencies: ["vuetify"],
   lintOnSave: false,
   outputDir: "docs",
-  publicPath: '/analytics-front-end/'
+  publicPath: '/analytics-front-end/',
+  devServer: {
+    open: process.platform === 'darwin',
+    host: '0.0.0.0',
+    port: 8081, // CHANGE YOUR PORT HERE!
+    https: false,
+    hotOnly: false,
+  },
 };

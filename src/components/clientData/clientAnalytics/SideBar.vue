@@ -67,7 +67,10 @@
                 </v-list-item-content>
               </v-list-item>
               <v-subheader>Analytics </v-subheader>
-              <v-list-item @click="updateTimeDxChartInput('Vol_DX')" ripple>
+              <v-list-item
+                @click="updateTimeDxChartInput('pct_max_payout')"
+                ripple
+              >
                 <v-list-item-action>
                   <v-icon color="#385F73">mdi-chart-line</v-icon>
                 </v-list-item-action>

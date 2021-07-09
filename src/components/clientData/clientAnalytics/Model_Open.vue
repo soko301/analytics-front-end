@@ -142,10 +142,6 @@ export default {
       this.$emit("emit_booking_ref", val);
     },
 
-    formatNumber(num) {
-      return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
-    },
-
     updateDataTable(api_response) {
       this.no_data_message = "";
 

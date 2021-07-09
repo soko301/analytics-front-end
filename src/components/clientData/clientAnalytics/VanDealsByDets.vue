@@ -28,8 +28,14 @@
           :footer-props="{ 'items-per-page-options': [-1] }"
         >
           <!-- eslint-disable-next-line vue/valid-v-slot-->
-          <template v-slot:item.With="{ item }">
-            <div class="green--text text--darken-3">
+          <template #item.With="{ item }">
+            <div
+              v-if="parseFloat(item.Amount) > 0"
+              class="blue--text text--darken-4"
+            >
+              {{ item.With }}
+            </div>
+            <div v-else class="red--text text--darken-3">
               {{ item.With }}
             </div>
           </template>
@@ -39,10 +45,10 @@
               v-if="parseFloat(item.Amount) > 0"
               class="blue--text text--darken-4"
             >
-              {{ item.Amount }}
+              {{ item.Amount.toLocaleString() }}
             </div>
             <div v-else class="red--text text--darken-3">
-              {{ item.Amount }}
+              {{ item.Amount.toLocaleString() }}
             </div>
           </template></v-data-table
         >
@@ -88,6 +94,7 @@ export default {
     dev() {},
     async getApiData() {
       try {
+        console.log(this.detsObj);
         let response = await Api.search_van_deals_by_dets(
           this.detsObj["cross"],
           this.detsObj["maturity_date"],

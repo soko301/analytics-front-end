@@ -43,4 +43,7 @@ export default {
   get_pnl_cross(account) {
     return Api.get(`/pnl_by_cross/${account}`);
   },
+  get_digital_scanner(account) {
+    return Api.get(`/digital_scanner/${account}`);
+  },
 };

@@ -59,7 +59,7 @@ export default {
     build_coords(cross_list, y_vals) {
       return cross_list.map((x) => {
         return {
-          x: x["Time From Inception"],
+          x: x["pnl_multiple"],
           y: parseFloat(x[y_vals]),
         };
       });
@@ -88,11 +88,11 @@ export default {
     async getApiData() {
       try {
         this.loaded = false;
-        let response = await Api.get_data_by_account(
+        let response = await Api.get_digital_scanner(
           this.selected_account_for_api
         );
         this.apiData = response.data;
-
+        console.log(this.apiData);
         this.loaded = true;
         this.$emit("alert_child_data_loaded", true);
       } catch (error) {
